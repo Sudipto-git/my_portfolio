@@ -9,17 +9,17 @@ export default function Footer() {
             <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
                 {/* Brand / Contact */}
                 <div>
-                    <div className="text-2xl font-semibold">Your Name</div>
+                    <div className="text-2xl font-semibold">Sudipto Paul</div>
                     <p className="mt-2 text-sm text-gray-400">
-                        Frontend developer building accessible, performant interfaces.
+                        “AI Developer | Specializing in Agentic AI, LLMs, and Intelligent Automation | Passionate About Human-AI Collaboration”
                     </p>
 
                     <div className="mt-4 flex items-center space-x-3">
                         <a
-                            href="mailto:hello@yourdomain.com"
+                            href="mailto:sudiptop760@gmail.com"
                             className="text-sm text-gray-300 hover:text-white"
                         >
-                            hello@yourdomain.com
+                            sudiptop760@gmail.com
                         </a>
                         <span className="hidden md:inline text-gray-600">·</span>
                         <a
@@ -65,7 +65,7 @@ export default function Footer() {
                     <div className="text-sm font-medium text-gray-300">Social</div>
                     <div className="mt-3 flex items-center space-x-4">
                         <a
-                            href="https://github.com/yourusername"
+                            href="https://github.com/Sudipto-git?tab=repositories"
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="GitHub"
@@ -78,7 +78,7 @@ export default function Footer() {
                         </a>
 
                         <a
-                            href="https://linkedin.com/in/yourusername"
+                            href="https://www.linkedin.com/public-profile/settings?trk=d_flagship3_profile_self_view_public_profile"
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="LinkedIn"
@@ -91,10 +91,10 @@ export default function Footer() {
                         </a>
 
                         <a
-                            href="https://twitter.com/yourusername"
+                            href="https://x.com/Sudipto29589981"
                             target="_blank"
                             rel="noopener noreferrer"
-                            aria-label="Twitter"
+                            aria-label="X.com"
                             className="text-gray-400 hover:text-white"
                         >
                             {/* Twitter SVG */}
@@ -104,7 +104,7 @@ export default function Footer() {
                         </a>
 
                         <a
-                            href="mailto:hello@yourdomain.com"
+                            href="mailto:sudiptop760@gmail.com"
                             aria-label="Email"
                             className="text-gray-400 hover:text-white"
                         >
@@ -118,7 +118,7 @@ export default function Footer() {
             </div>
 
             <div className="max-w-6xl mx-auto mt-8 border-t border-gray-800 pt-6 text-sm text-gray-500 flex flex-col md:flex-row justify-between items-center">
-                <span>© {year} Your Name. All rights reserved.</span>
+                <span>© {year} Sudipto. All rights reserved.</span>
                 <div className="mt-3 md:mt-0">
                     <Link href="/privacy" className="mr-4 hover:text-white">
                         Privacy
