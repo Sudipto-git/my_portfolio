@@ -4,11 +4,34 @@ import Link from "next/link";
 import Image from "next/image";
 
 const profileImage = "/pro3.jpg";
+const snowflakes = Array.from({ length: 42 }, (_, index) => ({
+  id: index,
+  left: (index * 23) % 100,
+  size: 2 + (index % 3),
+  delay: -0.6 * (index % 10),
+  duration: 7 + (index % 5),
+}));
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0A0F1F] to-[#0F172A] text-white">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-[#0A0F1F] to-[#0F172A] text-white">
+      <div className="snow-overlay" aria-hidden="true">
+        {snowflakes.map((flake) => (
+          <span
+            key={flake.id}
+            className="snowflake"
+            style={{
+              left: `${flake.left}%`,
+              width: `${flake.size}px`,
+              height: `${flake.size}px`,
+              animationDelay: `${flake.delay}s`,
+              animationDuration: `${flake.duration}s`,
+            }}
+          />
+        ))}
+      </div>
       
+      <div className="relative z-10">
       {/* NAVBAR */}
       {/* <header className="w-full py-4 backdrop-blur-md bg-white/5 border-b border-white/10">
         <div className="max-w-6xl mx-auto px-4 flex justify-between items-center">
@@ -109,6 +132,40 @@ export default function HomePage() {
       </section>
 
       <style jsx>{`
+        .snow-overlay {
+          position: fixed;
+          inset: 0;
+          pointer-events: none;
+          z-index: 0;
+        }
+        .snowflake {
+          position: absolute;
+          top: -5%;
+          border-radius: 999px;
+          background: rgba(191, 219, 254, 0.85);
+          animation-name: snowfall;
+          animation-timing-function: linear;
+          animation-iteration-count: infinite;
+          opacity: 0.8;
+          filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.35));
+        }
+        .snowflake:nth-child(even) {
+          background: rgba(125, 211, 252, 0.9);
+          filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.35));
+        }
+        @keyframes snowfall {
+          0% {
+            transform: translate3d(0, -10%, 0) scale(0.6);
+            opacity: 0;
+          }
+          20% {
+            opacity: 0.9;
+          }
+          100% {
+            transform: translate3d(-10px, 110vh, 0) scale(1);
+            opacity: 0;
+          }
+        }
         .wave-blur {
           position: absolute;
           inset: -15%;
@@ -239,6 +296,7 @@ I am motivated to contribute to teams working in AI, ML, and cloud-based applica
       <footer id="contact" className="py-10 text-center text-gray-400 text-sm">
         {/* <p>Contact: sudiptop760@gmail.com</p> */}
       </footer>
+      </div>
     </div>
   );
 }
