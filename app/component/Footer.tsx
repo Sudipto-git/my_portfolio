@@ -28,7 +28,7 @@ export default function Footer() {
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            Resume
+                            
                         </a>
                     </div>
                 </div>
@@ -47,11 +47,7 @@ export default function Footer() {
                                 Projects
                             </Link>
                         </li>
-                        <li>
-                            <Link href="#blog" className="hover:text-white">
-                                Blog
-                            </Link>
-                        </li>
+                        
                         <li>
                             <Link href="#contact" className="hover:text-white">
                                 Contact

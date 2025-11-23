@@ -2,65 +2,123 @@
 
 import Link from "next/link";
 import React, { useState, ReactElement } from "react";
+import { Menu, X, Sun, Moon, Search } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 type NavItem = { href: string; label: string };
 
 export default function Navbar(): ReactElement {
     const [open, setOpen] = useState(false);
+    const [dark, setDark] = useState(true);
+    const pathname = usePathname?.() ?? "/";
+
     const items: NavItem[] = [
-        { href: "/", label: "Home" },
-        { href: "/blog", label: "Blog" },
-        { href: "/projects", label: "Projects" },
-        { href: "/contact", label: "Contact" },
-        // { href: "/resume", label: "Resume" }
+        // { href: "/", label: "Home" },
+        // { href: "/projects", label: "Projects" },
+        // { href: "/blog", label: "Blog" },
+        // { href: "/resume", label: "Resume" },
+        // { href: "/contact", label: "Contact" },
     ];
 
     return (
-        <header className="sticky top-0 z-50 backdrop-blur-md bg-[linear-gradient(180deg,rgba(10,12,20,0.6),rgba(10,12,20,0.4))] border-b border-white/5">
-            <div className="max-w-[1100px] mx-auto px-4 py-2.5 flex items-center gap-4">
-                <Link className="inline-flex items-center gap-2.5 text-white font-semibold no-underline" href="#home" aria-label="Homepage">
-                    <svg
-                        className="w-9 h-9 text-cyan-400 flex-shrink-0"
-                        width="36"
-                        height="36"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        aria-hidden="true"
-                    >
-                        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" />
-                        <path d="M7 15c2-3 6-3 8 0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                    </svg>
-                    <span className="text-base">MyPortfolio</span>
-                </Link>
+        <header className="sticky top-0 z-50">
+            <div className="backdrop-blur-md bg-gradient-to-b from-black/60 to-black/30 border-b border-white/5">
+                <div className="max-w-[1100px] mx-auto px-4 py-3 flex items-center gap-4">
+                    <Link href="/" aria-label="Homepage" className="inline-flex items-center gap-3 no-underline">
+                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-400 to-indigo-600 flex items-center justify-center shadow-md">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
+                                <circle cx="12" cy="12" r="9" stroke="white" strokeWidth="1" opacity="0.12" />
+                                <path d="M7 15c2-3 6-3 8 0" stroke="white" strokeWidth="1.2" strokeLinecap="round" />
+                            </svg>
+                        </div>
+                        <span className="text-white font-semibold tracking-wide">Sudipto</span>
+                    </Link>
 
-                <button
-                    className="ml-auto inline-flex flex-col justify-center gap-1 w-9 h-9 bg-transparent border-0 p-1 cursor-pointer focus:outline-none focus:ring-2 focus:ring-cyan-300/40 rounded-md md:hidden"
-                    aria-expanded={open}
-                    aria-label="Toggle navigation"
-                    onClick={() => setOpen((v) => !v)}
-                >
-                    <span className="block h-[2px] w-full bg-white rounded-sm" />
-                    <span className="block h-[2px] w-full bg-white rounded-sm" />
-                    <span className="block h-[2px] w-full bg-white rounded-sm" />
-                </button>
+                    <nav className="hidden md:flex md:ml-6 md:items-center md:gap-1 flex-1">
+                        {items.map((it) => {
+                            const active = pathname === it.href || (it.href !== "/" && pathname?.startsWith(it.href));
+                            return (
+                                <Link
+                                    key={it.href}
+                                    href={it.href}
+                                    className={`relative px-4 py-2 mr-1 rounded-md no-underline transition-colors duration-200 ${
+                                        active ? "text-white" : "text-slate-300 hover:text-white"
+                                    }`}
+                                >
+                                    <span className="inline-block">{it.label}</span>
+                                    <span
+                                        className={`absolute left-3 right-3 h-[2px] bottom-0 bg-gradient-to-r from-cyan-400 to-indigo-500 transform origin-left transition-transform duration-300 ${
+                                            active ? "scale-x-100" : "scale-x-0"
+                                        }`}
+                                    />
+                                </Link>
+                            );
+                        })}
+                    </nav>
 
-                <nav
-                    className={`${
-                        open ? "flex" : "hidden"
-                    } absolute right-4 top-full mt-2 bg-[#0f172a] border border-white/4 p-2 rounded-lg flex-col gap-1 min-w-[160px] md:static md:flex md:flex-row md:ml-auto md:bg-transparent md:p-0 md:gap-2 md:min-w-0 md:border-none`}
-                    onClick={() => setOpen(false)}
-                >
+                    <div className="ml-auto flex items-center gap-3">
+                        <button
+                            aria-label="Search"
+                            className="p-2 rounded-md text-slate-300 hover:text-white hover:bg-white/5 transition-colors"
+                        >
+                            <Search size={18} />
+                        </button>
+
+                        <button
+                            onClick={() => setDark((d) => !d)}
+                            aria-label="Toggle theme"
+                            className="p-2 rounded-md text-slate-300 hover:text-white hover:bg-white/5 transition-colors"
+                        >
+                            {dark ? <Sun size={18} /> : <Moon size={18} />}
+                        </button>
+
+                        <button
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500 text-black rounded-full font-semibold hover:scale-105 transform transition"
+                            onClick={() => (window.location.href = "#contact")}
+                        >
+                            Hire Me
+                        </button>
+
+                        <button
+                            className="ml-2 md:hidden p-2 rounded-md text-slate-300 hover:text-white hover:bg-white/5"
+                            aria-label="Toggle menu"
+                            onClick={() => setOpen((v) => !v)}
+                        >
+                            {open ? <X size={20} /> : <Menu size={20} />}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* Mobile nav */}
+            <div
+                className={`md:hidden fixed inset-x-4 top-16 rounded-lg bg-[#071026]/80 backdrop-blur-md border border-white/6 shadow-lg transform transition-all duration-300 z-50 ${
+                    open ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"
+                }`}
+            >
+                <div className="p-4 flex flex-col gap-2">
                     {items.map((it) => (
                         <Link
                             key={it.href}
                             href={it.href}
-                            className="text-slate-400 no-underline px-3 py-2 rounded-md hover:text-white hover:bg-white/5 focus:text-white focus:bg-white/5"
+                            onClick={() => setOpen(false)}
+                            className="px-3 py-2 rounded-md text-slate-200 hover:bg-white/5 hover:text-white"
                         >
                             {it.label}
                         </Link>
                     ))}
-                </nav>
+
+                    <div className="mt-2 pt-2 border-t border-white/5 flex items-center gap-3">
+                        <button className="flex-1 px-4 py-2 rounded-md bg-white/5 text-white">Resume</button>
+                        <button className="px-3 py-2 rounded-md border border-white/6">Sign in</button>
+                    </div>
+                </div>
             </div>
+
+            <style jsx>{`
+                header { }
+                .project-pill { }
+            `}</style>
         </header>
     );
 }

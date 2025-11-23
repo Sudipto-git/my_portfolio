@@ -1,13 +1,61 @@
 "use client";
 import React from 'react';
+import { motion } from "framer-motion";
+
+// Animation variants for scroll-triggered animations with smooth easing
+const fadeInUp = {
+  hidden: { opacity: 0, y: 60 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { 
+      duration: 0.8,
+      ease: [0.25, 0.1, 0.25, 1] as const,
+      opacity: { duration: 0.6 }
+    }
+  }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.1
+    }
+  }
+};
+
+const itemAnimation = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { 
+      duration: 0.7,
+      ease: [0.25, 0.1, 0.25, 1] as const,
+      opacity: { duration: 0.5 }
+    }
+  }
+};
 
 const ResumePage = () => {
     return (
         <main className="p-4 sm:p-8 bg-gray-50 text-gray-800">
-            <div className="max-w-4xl mx-auto bg-white p-8 sm:p-12 shadow-lg rounded-lg">
+            <motion.div 
+                className="max-w-4xl mx-auto bg-white p-8 sm:p-12 shadow-lg rounded-lg"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: false, amount: 0.2, margin: "0px 0px -100px 0px" }}
+                variants={staggerContainer}
+            >
                 
                 {/* Header */}
-                <header className="text-center border-b-2 pb-6 border-gray-200">
+                <motion.header 
+                    className="text-center border-b-2 pb-6 border-gray-200"
+                    variants={fadeInUp}
+                >
                     <h1 className="text-4xl sm:text-5xl font-bold text-gray-900">Your Name</h1>
                     <p className="text-lg text-gray-600 mt-2">Your Professional Title</p>
                     <div className="flex justify-center gap-4 sm:gap-6 mt-4 text-sm text-gray-500">
@@ -17,20 +65,26 @@ const ResumePage = () => {
                         <span>|</span>
                         <span>your-linkedin-profile</span>
                     </div>
-                </header>
+                </motion.header>
 
                 {/* Summary Section */}
-                <section className="mt-8">
+                <motion.section 
+                    className="mt-8"
+                    variants={itemAnimation}
+                >
                     <h2 className="text-2xl font-semibold border-b-2 border-blue-500 pb-2">Summary</h2>
                     <p className="mt-4 text-gray-700">
                         A brief summary of your professional background, skills, and career goals. 
                         Highlight your key achievements and what you bring to the table. 
                         Keep it concise and impactful.
                     </p>
-                </section>
+                </motion.section>
 
                 {/* Experience Section */}
-                <section className="mt-8">
+                <motion.section 
+                    className="mt-8"
+                    variants={itemAnimation}
+                >
                     <h2 className="text-2xl font-semibold border-b-2 border-blue-500 pb-2">Experience</h2>
                     <div className="mt-4">
                         <h3 className="text-xl font-bold">Job Title</h3>
@@ -55,10 +109,13 @@ const ResumePage = () => {
                             <li>Focus on skills and experiences relevant to the job you are applying for.</li>
                         </ul>
                     </div>
-                </section>
+                </motion.section>
 
                 {/* Education Section */}
-                <section className="mt-8">
+                <motion.section 
+                    className="mt-8"
+                    variants={itemAnimation}
+                >
                     <h2 className="text-2xl font-semibold border-b-2 border-blue-500 pb-2">Education</h2>
                     <div className="mt-4">
                         <h3 className="text-xl font-bold">Your Degree</h3>
@@ -68,10 +125,13 @@ const ResumePage = () => {
                         </div>
                         <p className="mt-2 text-gray-700">Minor/Concentration, GPA, any honors or awards.</p>
                     </div>
-                </section>
+                </motion.section>
 
                 {/* Skills Section */}
-                <section className="mt-8">
+                <motion.section 
+                    className="mt-8"
+                    variants={itemAnimation}
+                >
                     <h2 className="text-2xl font-semibold border-b-2 border-blue-500 pb-2">Skills</h2>
                     <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-700">
                         <div>
@@ -91,9 +151,9 @@ const ResumePage = () => {
                             </ul>
                         </div>
                     </div>
-                </section>
+                </motion.section>
 
-            </div>
+            </motion.div>
         </main>
     );
 };

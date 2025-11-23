@@ -1,5 +1,56 @@
+"use client";
 import { FaGithub, FaLinkedin, FaInstagram, FaFacebook, FaWhatsapp, FaX } from "react-icons/fa6";
 import { MdOutlineEmail } from "react-icons/md";
+import { motion } from "framer-motion";
+
+// Animation variants for scroll-triggered animations with smooth easing
+const fadeInUp = {
+  hidden: { opacity: 0, y: 60 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { 
+      duration: 0.8,
+      ease: [0.25, 0.1, 0.25, 1] as const,
+      opacity: { duration: 0.6 }
+    }
+  }
+};
+
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: { 
+    opacity: 1,
+    transition: { 
+      duration: 1,
+      ease: [0.25, 0.1, 0.25, 1] as const
+    }
+  }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.1
+    }
+  }
+};
+
+const itemAnimation = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { 
+      duration: 0.7,
+      ease: [0.25, 0.1, 0.25, 1] as const,
+      opacity: { duration: 0.5 }
+    }
+  }
+};
 
 const socialLinks = [
 	{ name: "GitHub", href: "https://github.com/Sudipto-git?tab=repositories", icon: FaGithub },
@@ -13,15 +64,35 @@ export default function ContactPage() {
 	return (
 		<div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
 			<div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
-				<div className="text-center">
-					<h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-5xl">Contact Me</h1>
-					<p className="mt-4 max-w-2xl mx-auto text-lg text-gray-500 dark:text-gray-400">
+				<motion.div 
+					className="text-center"
+					initial="hidden"
+					whileInView="visible"
+					viewport={{ once: false, amount: 0.2, margin: "0px 0px -100px 0px" }}
+					variants={fadeInUp}
+				>
+					<motion.h1 
+						className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-5xl"
+						variants={fadeInUp}
+					>
+						Contact Me
+					</motion.h1>
+					<motion.p 
+						className="mt-4 max-w-2xl mx-auto text-lg text-gray-500 dark:text-gray-400"
+						variants={fadeInUp}
+					>
 						I&apos;m open to discussing new projects, creative ideas, or opportunities to be part of your visions.
-					</p>
-				</div>
+					</motion.p>
+				</motion.div>
 
-				<div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12">
-					<div className="space-y-8">
+				<motion.div 
+					className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12"
+					initial="hidden"
+					whileInView="visible"
+					viewport={{ once: false, amount: 0.15, margin: "0px 0px -100px 0px" }}
+					variants={staggerContainer}
+				>
+					<motion.div className="space-y-8" variants={itemAnimation}>
 						<h2 className="text-2xl font-bold text-gray-900 dark:text-white">Sudipto Paul</h2>
 						<div className="space-y-4">
 							<a
@@ -55,9 +126,12 @@ export default function ContactPage() {
 								</a>
 							))}
 						</div>
-					</div>
+					</motion.div>
 
-					<div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+					<motion.div 
+						className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg"
+						variants={itemAnimation}
+					>
 						<h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Send a Message</h2>
 						<form action="#" method="POST" className="space-y-6">
 							<div>
@@ -111,8 +185,8 @@ export default function ContactPage() {
 								</button>
 							</div>
 						</form>
-					</div>
-				</div>
+					</motion.div>
+				</motion.div>
 			</div>
 		</div>
 	);

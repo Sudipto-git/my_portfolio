@@ -1,5 +1,55 @@
 "use client";
 import React from "react";
+import { motion } from "framer-motion";
+
+// Animation variants for scroll-triggered animations with smooth easing
+const fadeInUp = {
+  hidden: { opacity: 0, y: 60 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { 
+      duration: 0.8,
+      ease: [0.25, 0.1, 0.25, 1] as const,
+      opacity: { duration: 0.6 }
+    }
+  }
+};
+
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: { 
+    opacity: 1,
+    transition: { 
+      duration: 1,
+      ease: [0.25, 0.1, 0.25, 1] as const
+    }
+  }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.1
+    }
+  }
+};
+
+const itemAnimation = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { 
+      duration: 0.7,
+      ease: [0.25, 0.1, 0.25, 1] as const,
+      opacity: { duration: 0.5 }
+    }
+  }
+};
 
 interface Project {
     name: string;
@@ -52,8 +102,14 @@ const ProjectsPage = () => {
     return (
         <div className="min-h-screen bg-[#03030b] text-slate-100">
             <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-14">
-                <section className="grid gap-10 lg:grid-cols-[1.1fr,0.9fr] items-center">
-                    <div className="space-y-6">
+                <motion.section 
+                    className="grid gap-10 lg:grid-cols-[1.1fr,0.9fr] items-center"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: false, amount: 0.2, margin: "0px 0px -100px 0px" }}
+                    variants={staggerContainer}
+                >
+                    <motion.div className="space-y-6" variants={fadeInUp}>
                         <p className="uppercase tracking-[0.4em] text-xs text-cyan-200/80">
                             Launch logs · Experiments · Build diaries
                         </p>
@@ -73,9 +129,12 @@ const ProjectsPage = () => {
                                 </div>
                             ))}
                         </div>
-                    </div>
+                    </motion.div>
 
-                    <div className="relative rounded-[32px] bg-gradient-to-br from-cyan-500/10 via-indigo-500/5 to-transparent p-10 border border-white/10 overflow-hidden">
+                    <motion.div 
+                        className="relative rounded-[32px] bg-gradient-to-br from-cyan-500/10 via-indigo-500/5 to-transparent p-10 border border-white/10 overflow-hidden"
+                        variants={fadeIn}
+                    >
                         <div className="absolute inset-0 noise-layer" />
                         <div className="absolute -right-8 -top-8 w-40 h-40 rounded-full border border-cyan-300/20 animate-slow-spin" />
                         <div className="absolute -left-10 bottom-6 w-32 h-32 rounded-full border border-pink-300/20 animate-slower-spin" />
@@ -96,10 +155,16 @@ const ProjectsPage = () => {
                                 ))}
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </motion.div>
+                </motion.section>
 
-                <section className="space-y-6">
+                <motion.section 
+                    className="space-y-6"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: false, amount: 0.2, margin: "0px 0px -100px 0px" }}
+                    variants={staggerContainer}
+                >
                     <div>
                         <p className="uppercase tracking-[0.4em] text-xs text-cyan-200/70">Projects</p>
                         <h2 className="text-3xl font-semibold mt-2">Deep dives & interactive tours</h2>
@@ -107,7 +172,11 @@ const ProjectsPage = () => {
 
                     <div className="grid gap-8">
                         {projectsData.map((project) => (
-                            <article key={project.name} className="project-card relative rounded-[28px] border border-white/5 bg-white/5 px-6 py-8 backdrop-blur-xl">
+                            <motion.article 
+                                key={project.name} 
+                                className="project-card relative rounded-[28px] border border-white/5 bg-white/5 px-6 py-8 backdrop-blur-xl"
+                                variants={itemAnimation}
+                            >
                                 <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.35em] text-cyan-300">
                                     <span>Featured build</span>
                                     <span className="h-0.5 w-10 bg-cyan-300/50" />
@@ -149,10 +218,10 @@ const ProjectsPage = () => {
                                         </a>
                                     )}
                                 </div>
-                            </article>
+                            </motion.article>
                         ))}
                     </div>
-                </section>
+                </motion.section>
             </main>
 
             <style jsx>{`
