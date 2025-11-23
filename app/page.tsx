@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import jsPDF from "jspdf";
@@ -235,8 +235,14 @@ const skillCategories = [
   },
 ];
 
+type VantaBirdsType = (options: Record<string, unknown>) => { destroy: () => void };
+type VantaEffectInstance = { destroy: () => void } | null;
+
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState("home");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const heroVantaRef = useRef<HTMLDivElement | null>(null);
+  const vantaInstance = useRef<VantaEffectInstance>(null);
   const pointerX = useMotionValue(0);
   const pointerY = useMotionValue(0);
   const parallaxX = useSpring(pointerX, { stiffness: 60, damping: 18, mass: 0.7 });
@@ -258,6 +264,7 @@ export default function HomePage() {
     });
 
     setActiveTab(sectionId);
+    setIsMenuOpen(false);
   };
 
   const downloadCVAsPDF = async () => {
@@ -316,6 +323,16 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768 && isMenuOpen) {
+        setIsMenuOpen(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isMenuOpen]);
+
+  useEffect(() => {
     const handlePointerMove = (event: MouseEvent) => {
       const x = (event.clientX / window.innerWidth - 0.5) * 30;
       const y = (event.clientY / window.innerHeight - 0.5) * 30;
@@ -326,6 +343,65 @@ export default function HomePage() {
     window.addEventListener("mousemove", handlePointerMove);
     return () => window.removeEventListener("mousemove", handlePointerMove);
   }, [pointerX, pointerY]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const initVanta = async () => {
+      if (typeof window === "undefined" || !heroVantaRef.current) return;
+
+      try {
+        const threeModule = await import("three");
+        const THREE = threeModule as typeof import("three");
+        window.THREE = THREE;
+
+        const VantaModule = await import("vanta/dist/vanta.birds.min.js");
+        if (cancelled || !heroVantaRef.current) return;
+
+        const VantaBirds = (VantaModule.default ?? VantaModule) as VantaBirdsType;
+        if (typeof VantaBirds !== "function") {
+          console.error("Vanta Birds module failed to load correctly");
+          return;
+        }
+
+        vantaInstance.current = VantaBirds({
+          THREE,
+          el: heroVantaRef.current,
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false,
+          minHeight: 200.0,
+          minWidth: 200.0,
+          scale: 1.0,
+          scaleMobile: 1.0,
+          backgroundColor: 0x07192f,
+          backgroundAlpha: 1.0,
+          color1: 0xff0000,
+          color2: 0x0d1fff,
+          colorMode: "varianceGradient",
+          quantity: 5.0,
+          birdSize: 1.0,
+          wingSpan: 30.0,
+          speedLimit: 5.0,
+          separation: 20.0,
+          alignment: 20.0,
+          cohesion: 20.0,
+        });
+      } catch (error) {
+        console.error("Failed to load Vanta effect", error);
+      }
+    };
+
+    initVanta();
+
+    return () => {
+      cancelled = true;
+      if (vantaInstance.current) {
+        vantaInstance.current.destroy();
+        vantaInstance.current = null;
+      }
+    };
+  }, []);
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-[#0A0F1F] to-[#0F172A] text-white">
@@ -393,29 +469,59 @@ export default function HomePage() {
 
       <div className="relative z-10">
         <header className="fixed top-0 left-0 right-0 z-50 w-full py-4 backdrop-blur-md bg-white/5 border-b border-white/10">
-          <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
+          <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-4">
             <h1 className="text-xl font-semibold tracking-wide">Portfolio</h1>
-            <nav className="flex gap-2 md:gap-4">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => scrollToSection(tab.id)}
-                  className={`px-3 py-2 text-sm rounded-lg font-medium transition-all duration-200 ${
-                    activeTab === tab.id
-                      ? "bg-cyan-500 text-black"
-                      : "text-gray-300 hover:text-white hover:bg-white/10"
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </nav>
+            <div className="flex items-center gap-3">
+              <nav className="hidden md:flex gap-2 md:gap-4">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => scrollToSection(tab.id)}
+                    className={`px-3 py-2 text-sm rounded-lg font-medium transition-all duration-200 ${
+                      activeTab === tab.id
+                        ? "bg-cyan-500 text-black"
+                        : "text-gray-300 hover:text-white hover:bg-white/10"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </nav>
+              <button
+                className="md:hidden inline-flex items-center justify-center rounded-lg border border-white/20 px-3 py-2 text-sm text-white"
+                onClick={() => setIsMenuOpen((prev) => !prev)}
+                aria-label="Toggle navigation"
+              >
+                {isMenuOpen ? "Close" : "Menu"}
+              </button>
+            </div>
           </div>
+          {isMenuOpen && (
+            <div className="md:hidden bg-[#0a0f1f]/95 border-t border-white/10 mt-3 px-4 pb-4">
+              <nav className="flex flex-col gap-2">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => scrollToSection(tab.id)}
+                    className={`w-full px-4 py-2 rounded-lg text-left text-sm font-medium transition-colors ${
+                      activeTab === tab.id ? "bg-cyan-500 text-black" : "text-gray-200 hover:bg-white/10"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </nav>
+            </div>
+          )}
         </header>
 
-        <section id="home" className="max-w-6xl mx-auto px-4 pt-32 pb-32 md:pb-40 min-h-screen flex flex-col md:flex-row items-center gap-12">
+        <section
+          id="home"
+          className="relative overflow-hidden max-w-6xl mx-auto px-4 sm:px-6 pt-28 pb-24 md:pt-32 md:pb-40 min-h-screen flex flex-col md:flex-row items-center gap-12"
+        >
+          <div ref={heroVantaRef} className="absolute inset-0 -z-10 opacity-70" aria-hidden="true" />
           <motion.div
-            className="flex-1 space-y-6"
+            className="flex-1 space-y-6 w-full"
             initial="hidden"
             animate="visible"
             variants={fadeInUp}
@@ -443,8 +549,8 @@ export default function HomePage() {
             </motion.div>
           </motion.div>
 
-          <motion.div className="flex-1 flex justify-center" initial="hidden" animate="visible" variants={fadeIn}>
-            <motion.div className="relative w-64 h-64 md:w-80 md:h-80" style={{ translateX: parallaxX, translateY: parallaxY }}>
+          <motion.div className="flex-1 flex justify-center w-full" initial="hidden" animate="visible" variants={fadeIn}>
+            <motion.div className="relative w-56 h-56 sm:w-64 sm:h-64 md:w-80 md:h-80" style={{ translateX: parallaxX, translateY: parallaxY }}>
               <div className="wave-blur wave-blur--one" />
               <div className="wave-blur wave-blur--two" />
               <div className="absolute inset-0 rounded-full bg-gradient-to-br from-cyan-500/25 via-indigo-600/20 to-transparent blur-3xl" />
