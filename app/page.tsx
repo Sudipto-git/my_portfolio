@@ -405,7 +405,7 @@ export default function HomePage() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-[#0A0F1F] to-[#0F172A] text-white">
-      <div className="background-ornaments" aria-hidden="true">
+      <div className="background-ornaments pointer-events-none" aria-hidden="true">
         <div className="gradient-orb gradient-orb--one" />
         <div className="gradient-orb gradient-orb--two" />
         <div className="gradient-orb gradient-orb--three" />
@@ -435,7 +435,7 @@ export default function HomePage() {
             />
           ))}
         </div>
-        <div className="code-streams">
+        <div className="code-streams hidden sm:block" aria-hidden="true">
           {codeColumns.map((column) => (
             <div
               key={`code-column-${column.id}`}

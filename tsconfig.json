@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -11,7 +15,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "incremental": true,
     "plugins": [
       {
@@ -20,11 +24,20 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"],
-      "vanta/dist/*": ["./node_modules/vanta/dist/*"]
+      "@/*": [
+        "./*"
+      ],
+      "vanta/dist/*": [
+        "./node_modules/vanta/dist/*"
+      ]
     },
-    "typeRoots": ["./types", "./node_modules/@types"],
-    "types": ["vanta"]
+    "typeRoots": [
+      "./types",
+      "./node_modules/@types"
+    ],
+    "types": [
+      "vanta"
+    ]
   },
   "include": [
     "next-env.d.ts",
@@ -35,5 +48,7 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }
