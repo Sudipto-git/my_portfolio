@@ -405,7 +405,7 @@ export default function HomePage() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-[#0A0F1F] to-[#0F172A] text-white">
-      <div className="background-ornaments pointer-events-none" aria-hidden="true">
+      <div className="background-ornaments pointer-events-none -z-10" aria-hidden="true">
         <div className="gradient-orb gradient-orb--one" />
         <div className="gradient-orb gradient-orb--two" />
         <div className="gradient-orb gradient-orb--three" />
@@ -435,16 +435,14 @@ export default function HomePage() {
             />
           ))}
         </div>
-        <div className="code-streams hidden sm:block" aria-hidden="true">
+        <div className="code-streams hidden" aria-hidden="true">
           {codeColumns.map((column) => (
             <div
               key={`code-column-${column.id}`}
               className="code-column"
               style={{ left: column.left, animationDelay: `${column.delay}s` }}
             >
-              <span>01000111·1010·1101·AI</span>
-              <span>λ→ƒ(x)·Σ·π·∇</span>
-              <span>DATA·VISION·LLM</span>
+              {/* decorative text disabled */}
             </div>
           ))}
         </div>
@@ -519,7 +517,7 @@ export default function HomePage() {
           id="home"
           className="relative overflow-hidden max-w-6xl mx-auto px-4 sm:px-6 pt-28 pb-24 md:pt-32 md:pb-40 min-h-screen flex flex-col md:flex-row items-center gap-12"
         >
-          <div ref={heroVantaRef} className="absolute inset-0 -z-10 opacity-70" aria-hidden="true" />
+          <div ref={heroVantaRef} className="absolute inset-0 z-0 opacity-70" aria-hidden="true" />
           <motion.div
             className="flex-1 space-y-6 w-full"
             initial="hidden"
